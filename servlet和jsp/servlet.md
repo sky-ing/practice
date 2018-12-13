@@ -112,7 +112,7 @@
     - hs.setMaxInactiveInterval(int seconds)
     - 注意：在制定的时间内session对象没有被使用则销毁，如果使用了则重新计时
   - 设置session强制失效
-    - hs.invalidate
+    - hs.invalidate()
   - 存储和获取数据
     - 存储：hs.setSttribute(g name,Object value);
     - 获取：hs.getAttribute(String name);
@@ -162,7 +162,14 @@
   - 获取servletConfig对象：ServletConfig = this.getServletConfig();
   - 获取web.xml中的配置数据sc.getInitParameter("config");
 + 配置：配置在servlet里面
-  - <servlet><init-param><param-name>config</param-name><param-value>utf-8</param-value></init-param></servlet>
+  ``` xml
+  <servlet>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+  </servlet>
+  ```
 
 
 #####Web.xml 文件使用总结：
@@ -182,3 +189,34 @@
 filter-> servlet 这个顺序加载组件，这些元素可配置在 web.xml
 文件中的任意位置。
 + 加载时机：服务器启动时。
+
+#####server.xml
++ 问题：浏览器发起请求后，服务器根据请求在 webapps 目下调用对应
+的 Servlet 进行请求处理。那么为什么是 webapps 目录难道不能是
+其他的目录吗？
++ 解决：了解 server.xml 文件的配置信息
++ Server.xml 文件核心组件：
+``` xml
+<Server>
+  <Service>
+    <Connector/>
+    <Connector/>
+    <Engine>
+      <Host>
+        <Context/>
+      </Host>
+    </Engine>
+  </Service>
+</Server>
+```
++ 热部署： <Context path="/Pet" reloadable="true" docBase="F:/PetWeb(项目的绝对路径到webroot)" />
+
+#####SERVLET重定向路径总结：
++ 相对路径：从当前请求的路径查找资源的路径
+  - 相对路径如果servlet的别名中包含目录，会造成重定向资源查找失败
++ 绝对路径：第一个/表示服务器根目录
+  - /虚拟项目名/资源路径
+
+#####servlet请求转发：
++ /表示项目根目录
+  - req.getRequestDispatcher("/资源路径")。forward(req,resp);
